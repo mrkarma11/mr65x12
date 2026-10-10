@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>JARVIS</title>
+ <link rel="manifest" href="manifest.json">
+ <meta name="theme-color" content="#03070f">
+ <link rel="icon" href="icon-192.png">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   body {
@@ -302,6 +305,13 @@ if (synth) {
   synth.getVoices();
   if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = function() { synth.getVoices(); };
 }
+
+
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+
 </script>
 </body>
 </html>
