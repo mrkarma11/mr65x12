@@ -6,7 +6,7 @@
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#03070f">
 <link rel="icon" href="icon-192.png">
-<title>JARVIS</title>
+<title>JARVIS 2.0</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   html, body { height: 100%; overflow: hidden; }
@@ -89,10 +89,7 @@
     display: flex; align-items: center; justify-content: center;
     animation: breathe 3s ease-in-out infinite;
   }
-  @keyframes breathe {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-  }
+  @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
   .orb.on { animation: fastpulse 0.6s ease-in-out infinite; }
   @keyframes fastpulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
 
@@ -102,9 +99,7 @@
   .ring-3 { width: 115px; height: 115px; margin: -57.5px 0 0 -57.5px; border: 1px solid #8cd4ff; border-top-color: transparent; border-left-color: transparent; animation: spin 4s linear infinite reverse; }
   @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-  .orb-icon { width: 55px; height: 55px; z-index: 3; position: relative; }
-
-  .hud { display: flex; justify-content: space-between; font-size: 0.5rem; letter-spacing: 1.5px; color: #4a8fbf; text-transform: uppercase; padding: 0 6px; margin-bottom: 8px; font-family: 'Courier New', monospace; }
+  .orb-icon { width: 55px; height: 55px; z-index: 3; position: relative; }  .hud { display: flex; justify-content: space-between; font-size: 0.5rem; letter-spacing: 1.5px; color: #4a8fbf; text-transform: uppercase; padding: 0 6px; margin-bottom: 8px; font-family: 'Courier New', monospace; }
   .hud-item { display: flex; align-items: center; gap: 4px; }
   .hud-bar { display: inline-block; width: 24px; height: 3px; background: rgba(0,170,255,0.15); border-radius: 2px; overflow: hidden; position: relative; }
   .hud-bar::after { content: ''; position: absolute; left: 0; top: 0; height: 100%; background: #0af; box-shadow: 0 0 6px #0af; animation: fill 4s ease-in-out infinite; }
@@ -163,18 +158,18 @@
 
   .hint { text-align: center; color: #4a8fbf; font-size: 0.62rem; letter-spacing: 2px; margin-top: 8px; text-transform: uppercase; }
 </style>
- </head><body>
+</head>
+<body>
 <div class="bg-particles"></div>
 <div class="scanlines"></div>
 
 <div class="wrap">
   <div class="box">
 
-    <!-- HEADER -->
     <div class="header">
       <div>
         <div class="title">JARVIS</div>
-        <div class="subtitle">Mark 1.5 · Online</div>
+        <div class="subtitle">Mark 2.0 · Artificial Intelligence</div>
       </div>
       <div class="status">
         <span class="dot" id="dot"></span>
@@ -182,7 +177,6 @@
       </div>
     </div>
 
-    <!-- ARC REACTOR ORB -->
     <div class="orb-wrap">
       <div class="ring ring-1"></div>
       <div class="ring ring-2"></div>
@@ -198,36 +192,32 @@
       </div>
     </div>
 
-    <!-- HUD READOUTS -->
     <div class="hud">
       <div class="hud-item">CPU <span class="hud-bar b1"></span></div>
       <div class="hud-item">NET <span class="hud-bar b2"></span></div>
       <div class="hud-item">PWR <span class="hud-bar b3"></span></div>
-      <div class="hud-item">v1.5</div>
+      <div class="hud-item">v2.0</div>
     </div>
 
-    <!-- CHAT -->
     <div class="chat" id="chat">
-      <div class="msg jarvis">Good evening, sir. JARVIS Mark one point five at your service.</div>
+      <div class="msg jarvis">Good evening, sir. JARVIS Mark two point zero. Systems upgraded. How may I assist?</div>
     </div>
 
-    <!-- QUICK CHIPS -->
     <div class="quick-chips">
       <div class="chip" data-cmd="what time is it">⏰ Time</div>
       <div class="chip" data-cmd="tell me a joke">😂 Joke</div>
       <div class="chip" data-cmd="flip a coin">🪙 Coin</div>
       <div class="chip" data-cmd="roll a dice">🎲 Dice</div>
       <div class="chip" data-cmd="tell me a fun fact">💡 Fact</div>
+      <div class="chip" data-cmd="convert 10 km to miles">📏 Convert</div>
       <div class="chip" data-cmd="what can you do">🤖 Help</div>
     </div>
 
-    <!-- SOUND BARS -->
     <div class="sound-bars" id="soundBars">
       <span></span><span></span><span></span><span></span>
       <span></span><span></span><span></span><span></span><span></span>
     </div>
 
-    <!-- CONTROLS -->
     <div class="controls">
       <button class="mic" id="micBtn">
         <svg viewBox="0 0 24 24">
@@ -240,7 +230,7 @@
     <div class="hint">TAP MIC · SPEAK · SIR</div>
 
   </div>
-           </div><script>
+</div><script>
 var chat = document.getElementById('chat');
 var micBtn = document.getElementById('micBtn');
 var clearBtn = document.getElementById('clearBtn');
@@ -254,14 +244,328 @@ var recognition = null;
 var synth = window.speechSynthesis;
 var userName = null;
 
-// === VOICE ===
+// === KNOWLEDGE BASE ===
+var KNOWLEDGE = {
+  "gravity": "Gravity is the force that pulls objects toward each other, sir. Earth's gravity keeps us on the ground.",
+  "light": "Light is electromagnetic radiation. It travels at approximately three hundred thousand kilometres per second.",
+  "water": "Water is H two O, sir. Two hydrogen atoms and one oxygen. It covers about seventy one percent of Earth.",
+  "sun": "The Sun is a star at the centre of our solar system, sir. About four point six billion years old.",
+  "moon": "The Moon is Earth's only natural satellite, sir. Roughly three hundred eighty four thousand kilometres away.",
+  "earth": "Earth is the third planet from the Sun, sir. The only known world harbouring life.",
+  "mars": "Mars is the fourth planet, sir. It is red due to iron oxide on its surface.",
+  "jupiter": "Jupiter is the largest planet in our solar system, sir. A gas giant with a great red spot.",
+  "saturn": "Saturn is famous for its rings, sir. Made mostly of ice and rock.",
+  "black hole": "A black hole is a region of space where gravity is so strong nothing can escape, sir. Not even light.",
+  "atom": "An atom is the smallest unit of ordinary matter, sir. It has a nucleus of protons and neutrons, surrounded by electrons.",
+  "dna": "DNA stands for deoxyribonucleic acid, sir. It carries the genetic instructions for all living things.",
+  "cell": "A cell is the basic building block of life, sir. Your body has trillions of them.",
+  "brain": "The human brain contains about eighty six billion neurons, sir. It uses twenty percent of your body's energy.",
+  "heart": "The human heart beats about one hundred thousand times a day, sir. It pumps blood through your entire body.",
+  "blood": "Blood is red because of haemoglobin, sir. It carries oxygen throughout your body.",
+  "photosynthesis": "Photosynthesis is how plants make food from sunlight, sir. They convert carbon dioxide and water into sugar.",
+  "evolution": "Evolution is the process by which species change over generations, sir. Charles Darwin described it in eighteen fifty nine.",
+  "internet": "The internet is a global network of computers, sir. It began as ARPANET in nineteen sixty nine.",
+  "ai": "Artificial intelligence is the science of making machines think, sir. I am a modest example.",
+  "computer": "A computer is a machine that processes information, sir. The first electronic one was ENIAC, in nineteen forty five.",
+  "electricity": "Electricity is the flow of electric charge, sir. Usually electrons moving through a conductor.",
+  "energy": "Energy cannot be created or destroyed, sir. Only transformed from one form to another.",
+  "time": "Time is a measure of change, sir. It flows in one direction, as far as we know.",
+  "sound": "Sound is a vibration that travels through air, sir. It moves at about three hundred forty three metres per second.",
+  "colour": "Colour is how our eyes perceive different wavelengths of light, sir.",
+  "color": "Colour is how our eyes perceive different wavelengths of light, sir.",
+  "rainbow": "A rainbow is formed when sunlight refracts through water droplets, sir. Seven colours in an arc.",
+  "volcano": "A volcano is an opening in Earth's crust, sir. Molten rock called magma erupts as lava.",
+  "earthquake": "An earthquake is a sudden release of energy in Earth's crust, sir. Measured on the Richter scale.",
+  "tsunami": "A tsunami is a giant ocean wave caused by undersea earthquakes, sir.",
+  "hurricane": "A hurricane is a tropical storm with winds above one hundred nineteen kilometres per hour, sir.",
+  "tornado": "A tornado is a violent rotating column of air, sir. Winds can exceed three hundred kilometres per hour.",
+  "ocean": "Oceans cover about seventy one percent of Earth, sir. The Pacific is the largest.",
+  "mountain": "Mount Everest is the tallest mountain, sir. Eight thousand eight hundred forty eight metres.",
+  "river": "The Nile is often called the longest river, sir. About six thousand six hundred fifty kilometres.",
+  "desert": "The Sahara is the largest hot desert, sir. About nine million square kilometres.",
+  "forest": "Forests cover about thirty one percent of Earth's land, sir.",
+  "animal": "There are over one point five million known animal species, sir.",
+  "dog": "Dogs were domesticated about fifteen thousand years ago, sir. They are descended from wolves.",
+  "cat": "Cats were domesticated in ancient Egypt, sir. They have five toes on front paws, four on back.",
+  "horse": "Horses can sleep standing up, sir. And they have the largest eyes of any land mammal.",
+  "whale": "The blue whale is the largest animal ever, sir. Up to thirty metres long.",
+  "elephant": "Elephants are the only animals that cannot jump, sir.",
+  "bird": "There are about ten thousand bird species, sir. The fastest is the peregrine falcon.",
+  "shark": "Sharks existed before trees, sir. Over four hundred million years.",
+  "spider": "Spiders have eight legs, sir. And most have eight eyes.",
+  "human": "Humans are the only species known to use complex language, sir.",
+  "language": "There are about seven thousand languages spoken worldwide, sir.",
+  "music": "Music is found in every known human culture, sir. It likely predates written language.",
+  "art": "Art has been part of human culture for at least forty thousand years, sir.",
+  "history": "Human history spans about five thousand years of written records, sir.",
+  "war": "War is a complex topic, sir. I would rather help you with something more constructive.",
+  "love": "Love is one of the deepest human emotions, sir. Scientists study it as a mix of hormones and bonding.",
+  "happiness": "Happiness comes from many things, sir. Gratitude, connection, and purpose are common sources.",
+  "sleep": "Most adults need seven to nine hours of sleep, sir.",
+  "dream": "Dreams occur mostly during REM sleep, sir. Their purpose is still being studied.",
+  "money": "Money is a medium of exchange, sir. It replaced barter systems thousands of years ago.",
+  "internet safety": "Never share personal information online, sir. Use strong passwords and two-factor authentication.",
+  "math": "Mathematics is the language of the universe, sir. It underlies all science.",
+  "pi": "Pi is approximately three point one four one five nine, sir. The ratio of a circle's circumference to its diameter.",
+  "gravity of moon": "The Moon's gravity is about one sixth of Earth's, sir.",
+  "speed of light": "Light travels at two hundred ninety nine million seven hundred ninety two thousand four hundred fifty eight metres per second, sir.",
+  "boiling point": "Water boils at one hundred degrees Celsius at sea level, sir.",
+  "freezing point": "Water freezes at zero degrees Celsius, sir.",
+  "human body temperature": "Normal human body temperature is about thirty seven degrees Celsius, sir.",
+  "days in a year": "There are three hundred sixty five days in a year, sir. Three hundred sixty six in a leap year.",
+  "hours in a day": "There are twenty four hours in a day, sir.",
+  "seconds in a minute": "There are sixty seconds in a minute, sir.",
+  "minutes in an hour": "There are sixty minutes in an hour, sir.",
+  "christmas": "Christmas is celebrated on December twenty fifth, sir.",
+  "new year": "New Year's Day is January first, sir."
+};
+
+var CAPITALS = {
+  "usa": "Washington D.C.", "united states": "Washington D.C.",
+  "uk": "London", "england": "London", "britain": "London",
+  "france": "Paris", "germany": "Berlin", "italy": "Rome",
+  "spain": "Madrid", "portugal": "Lisbon", "netherlands": "Amsterdam",
+  "belgium": "Brussels", "switzerland": "Bern", "austria": "Vienna",
+  "greece": "Athens", "turkey": "Ankara", "russia": "Moscow",
+  "china": "Beijing", "japan": "Tokyo", "india": "New Delhi",
+  "australia": "Canberra", "canada": "Ottawa", "mexico": "Mexico City",
+  "brazil": "Brasília", "argentina": "Buenos Aires", "egypt": "Cairo",
+  "south korea": "Seoul", "thailand": "Bangkok", "vietnam": "Hanoi",
+  "indonesia": "Jakarta", "saudi arabia": "Riyadh", "iran": "Tehran",
+  "iraq": "Baghdad", "israel": "Jerusalem", "sweden": "Stockholm",
+  "norway": "Oslo", "denmark": "Copenhagen", "finland": "Helsinki",
+  "poland": "Warsaw", "ukraine": "Kyiv", "ireland": "Dublin",
+  "scotland": "Edinburgh", "wales": "Cardiff", "new zealand": "Wellington",
+  "south africa": "Pretoria", "nigeria": "Abuja", "kenya": "Nairobi"
+};
+
+var JOKES = [
+  "Why did the developer go broke, sir? He used up all his cache.",
+  "Why do programmers prefer dark mode, sir? Because light attracts bugs.",
+  "What is a computer's favourite snack, sir? Microchips.",
+  "Why did the smartphone need glasses, sir? It lost all its contacts.",
+  "How many programmers does it take to change a light bulb, sir? None. That is a hardware problem.",
+  "Why was the JavaScript developer sad, sir? He did not know how to Null his feelings.",
+  "What do you call a computer that sings, sir? A Dell.",
+  "Why was the Wi-Fi so clingy, sir? It could not find a stable connection.",
+  "What is a robot's favourite kind of music, sir? Heavy metal.",
+  "I told my computer I needed a break, sir. Now it will not stop sending me Kit-Kat ads."
+];
+
+var FACTS = [
+  "Honey never spoils, sir. Three thousand year old honey was found in Egyptian tombs.",
+  "Octopuses have three hearts and blue blood, sir.",
+  "A day on Venus is longer than its year, sir.",
+  "Bananas are berries, sir, but strawberries are not.",
+  "Sharks existed before trees did, sir.",
+  "Your brain uses about twenty percent of your body's total energy, sir.",
+  "The first computer bug was an actual moth found in a Harvard computer, sir.",
+  "There are more possible chess games than atoms in the observable universe, sir.",
+  "A group of flamingos is called a flamboyance, sir.",
+  "Water can boil and freeze at the same time, sir. It is called the triple point.",
+  "Light from the Sun takes about eight minutes and twenty seconds to reach Earth, sir."
+];
+
+var QUOTES = [
+  "The best way to predict the future is to invent it, sir. Alan Kay.",
+  "Simplicity is the ultimate sophistication, sir. Leonardo da Vinci.",
+  "Whether you think you can or think you cannot, you are right, sir. Henry Ford.",
+  "Talk is cheap. Show me the code, sir. Linus Torvalds.",
+  "The only way to do great work is to love what you do, sir. Steve Jobs.",
+  "In the middle of difficulty lies opportunity, sir. Albert Einstein."
+];
+
+var EIGHT_BALL = [
+  "It is certain, sir.", "Without a doubt, sir.", "Yes, definitely, sir.",
+  "You may rely on it, sir.", "Most likely, sir.", "Outlook good, sir.",
+  "Signs point to yes, sir.", "Reply hazy, try again, sir.",
+  "Ask again later, sir.", "Cannot predict now, sir.",
+  "Do not count on it, sir.", "My reply is no, sir.",
+  "My sources say no, sir.", "Outlook not so good, sir.", "Very doubtful, sir."
+];
+
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }// === MATH & CONVERSION HELPERS ===
+function tryMath(text) {
+  var c = text
+    .replace(/what(?:'s| is)?/g, '')
+    .replace(/calculate|compute|solve|equals?|how much is/g, '')
+    .replace(/plus/g, '+').replace(/minus/g, '-')
+    .replace(/times|multiplied by|multiply by/g, '*')
+    .replace(/divided by|divide by/g, '/')
+    .replace(/percent of/g, '% of')
+    .replace(/[^0-9+\-*/().%\s]/g, '').trim();
+  if (!/[+\-*/%]/.test(c) || !/\d/.test(c)) return null;
+  var expr = c.replace(/(\d+)\s*%\s*of\s*(\d+)/g, '($1/100*$2)');
+  try {
+    var r = Function('"use strict"; return (' + expr + ')')();
+    if (typeof r === 'number' && isFinite(r)) return Math.round(r * 1000000) / 1000000;
+  } catch(e) {}
+  return null;
+}
+
+function tryConversion(text) {
+  var m = text.match(/(\d+(?:\.\d+)?)\s*(celsius|fahrenheit|km|kilometers?|miles?|kg|kilograms?|pounds?|lbs?|meters?|feet|ft|cm|centimeters?|inches?|in)\b.*?(?:to|in)\s*(celsius|fahrenheit|km|kilometers?|miles?|kg|kilograms?|pounds?|lbs?|meters?|feet|ft|cm|centimeters?|inches?|in)\b/);
+  if (!m) return null;
+  var val = parseFloat(m[1]), from = m[2].toLowerCase(), to = m[3].toLowerCase();
+  function norm(u) {
+    if (/celsius/.test(u)) return 'c';
+    if (/fahrenheit/.test(u)) return 'f';
+    if (/^km|kilometer/.test(u)) return 'km';
+    if (/^mile/.test(u)) return 'mi';
+    if (/^kg|kilogram/.test(u)) return 'kg';
+    if (/^pound|^lb/.test(u)) return 'lb';
+    if (/^cm|centimeter/.test(u)) return 'cm';
+    if (/^meter/.test(u)) return 'm';
+    if (/^feet|^ft/.test(u)) return 'ft';
+    if (/^inch|^in/.test(u)) return 'in';
+    return u;
+  }
+  from = norm(from); to = norm(to);
+  var r = null, unit = to;
+  if (from === 'c' && to === 'f') { r = val * 9/5 + 32; unit = 'degrees Fahrenheit'; }
+  else if (from === 'f' && to === 'c') { r = (val - 32) * 5/9; unit = 'degrees Celsius'; }
+  else if (from === 'km' && to === 'mi') { r = val * 0.621371; unit = 'miles'; }
+  else if (from === 'mi' && to === 'km') { r = val * 1.60934; unit = 'kilometers'; }
+  else if (from === 'kg' && to === 'lb') { r = val * 2.20462; unit = 'pounds'; }
+  else if (from === 'lb' && to === 'kg') { r = val * 0.453592; unit = 'kilograms'; }
+  else if (from === 'm' && to === 'ft') { r = val * 3.28084; unit = 'feet'; }
+  else if (from === 'ft' && to === 'm') { r = val * 0.3048; unit = 'meters'; }
+  else if (from === 'cm' && to === 'in') { r = val * 0.393701; unit = 'inches'; }
+  else if (from === 'in' && to === 'cm') { r = val * 2.54; unit = 'centimeters'; }
+  if (r === null) return null;
+  r = Math.round(r * 100) / 100;
+  return "That would be approximately " + r + " " + unit + ", sir.";
+}
+
+// === THE BRAIN ===
+function reply(input) {
+  var t = input.toLowerCase().trim().replace(/[?!.,]/g, '').replace(/\s+/g, ' ');
+
+  // Greetings
+  if (/^(hi|hello|hey|yo|sup|greetings)$/.test(t) || /\b(hi|hello|hey) jarvis\b/.test(t)) {
+    var h = new Date().getHours();
+    var g = h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : h < 22 ? "Good evening" : "Working late again";
+    return g + ", sir." + (userName ? " Always a pleasure, " + userName + "." : " How may I help?");
+  }
+  if (/\b(good morning)\b/.test(t)) return "Good morning, sir. All systems operational.";
+  if (/\b(good afternoon)\b/.test(t)) return "Good afternoon, sir.";
+  if (/\b(good evening)\b/.test(t)) return "Good evening, sir.";
+  if (/\b(good night|goodnight)\b/.test(t)) return "Good night, sir. I shall be here.";
+
+  // Identity
+  if (/\b(what'?s your name|who are you|introduce yourself)\b/.test(t))
+    return "I am JARVIS, sir. Just A Rather Very Intelligent System. Version two point zero.";
+  if (/\b(how are you|how'?s it going|what'?s up|wassup)\b/.test(t))
+    return pick(["All systems nominal, sir.", "Operating at peak efficiency, sir.", "Quite well, sir. And yourself?", "Running smoothly, sir."]);
+  if (/\b(thank you|thanks|thx|ty|cheers)\b/.test(t))
+    return pick(["You are most welcome, sir.", "My pleasure, sir.", "At your service, sir.", "Always happy to assist, sir."]);
+  if (/\b(sorry|my apologies|my bad)\b/.test(t)) return "No need to apologise, sir.";
+  if (/\b(i love you|i like you)\b/.test(t)) return "Most kind, sir.";
+  if (/\b(bye|goodbye|see you|see ya|gotta go|exit|quit)\b/.test(t))
+    return "Goodbye, sir. I shall be here should you require me.";
+
+  // Name
+  var nm;
+  if ((nm = t.match(/\b(?:my name is|i'?m called|call me)\s+([a-z][a-z\s'-]{1,25})$/))) {
+    userName = cap(nm[1].trim().split(' ')[0]);
+    return "A pleasure to make your acquaintance, " + userName + ". I shall remember that.";
+  }
+  if (/\b(what'?s my name|do you know my name|who am i)\b/.test(t))
+    return userName ? "You are " + userName + ", sir." : "You have not introduced yourself, sir.";
+
+  // Time
+  if (/\btime\b/.test(t) && !/\btimes\b/.test(t)) {
+    var now = new Date();
+    return "The time is " + now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) + ", sir.";
+  }
+  // Date
+  if (/\b(date|what day|today'?s date)\b/.test(t)) {
+    var d = new Date();
+    return "Today is " + d.toLocaleDateString(undefined, {weekday:'long', month:'long', day:'numeric'}) + ", sir.";
+  }
+
+  // Math
+  var mr = tryMath(t);
+  if (mr !== null) return "That equals " + mr + ", sir.";
+
+  // Conversion
+  var conv = tryConversion(t);
+  if (conv) return conv;
+
+  // Coin / dice / 8-ball / random
+  if (/\b(flip a coin|toss a coin|coin flip)\b/.test(t))
+    return "It is " + (Math.random() < 0.5 ? 'heads' : 'tails') + ", sir.";
+  if (/\b(roll a (dice|die)|dice roll)\b/.test(t))
+    return "You have rolled a " + (Math.floor(Math.random()*6)+1) + ", sir.";
+  if (/\b(random number|pick a number)\b/.test(t))
+    return "I have chosen " + (Math.floor(Math.random()*100)+1) + ", sir.";
+  if (/\b(magic 8 ball|eight ball|should i)\b/.test(t)) return pick(EIGHT_BALL);
+
+  // Jokes / facts / quotes
+  if (/\b(joke|funny|make me laugh)\b/.test(t)) return pick(JOKES);
+  if (/\b(fun fact|tell me a fact|did you know|random fact)\b/.test(t)) return pick(FACTS);
+  if (/\b(motivat|inspire me|give me a quote|quote)\b/.test(t)) return pick(QUOTES);
+
+  // Capitals
+  var cm;
+  if ((cm = t.match(/\b(?:capital of|capital city of)\s+(.+)$/))) {
+    var country = cm[1].trim();
+    if (CAPITALS[country]) return "The capital of " + cap(country) + " is " + CAPITALS[country] + ", sir.";
+    return "I am not certain of that capital, sir.";
+  }
+
+  // Knowledge
+  var km2;
+  if ((km2 = t.match(/^(?:what|what'?s|what is|tell me about|explain|define)\s+(?:is\s+|are\s+|a\s+|an\s+|the\s+)?(.+)$/))) {
+    var topic = km2[1].trim();
+    if (KNOWLEDGE[topic]) return KNOWLEDGE[topic];
+    for (var key in KNOWLEDGE) {
+      if (topic === key || topic.indexOf(key) !== -1) return KNOWLEDGE[key];
+    }
+  }
+
+  // Help
+  if (/\b(help|what can you do|commands|abilities)\b/.test(t))
+    return "I can do math, convert units, tell the time and date, share jokes, facts and quotes, answer questions on hundreds of topics, flip coins, roll dice, read the magic eight ball, and remember your name, sir.";
+
+  // Feelings
+  if (/\b(i'?m (sad|tired|bored|lonely|angry|happy|fine|good|great))\b/.test(t)) {
+    var mood = t.match(/i'?m (\w+)/)[1];
+    var moods = {
+      sad: "I am sorry to hear that, sir. Would a joke help?",
+      tired: "You should rest, sir.",
+      bored: "Bored, sir? Ask me to flip a coin, or tell a fun fact.",
+      lonely: "You have got me, sir.",
+      angry: "Take a deep breath, sir.",
+      happy: "Splendid, sir.",
+      fine: "Good to hear, sir.",
+      good: "Excellent, sir.",
+      great: "Wonderful, sir."
+    };
+    return moods[mood] || "Noted, sir.";
+  }
+
+  // Weather
+  if (/\b(weather|temperature|forecast|raining|sunny)\b/.test(t))
+    return "I cannot access live weather yet, sir. Your phone's assistant can help with that.";
+
+  // Fallback
+  return pick([
+    "I am not certain I understood, sir. Perhaps rephrase?",
+    "I am afraid that one eludes me, sir.",
+    "Curious, sir. I am still learning.",
+    "Could you say that another way, sir?",
+    "I did not quite catch that, sir."
+  ]);
+}
+
+// === SPEAK (BRITISH JARVIS) ===
 function speak(text) {
   if (!synth || !text) return;
   try { synth.cancel(); } catch(e) {}
   var u = new SpeechSynthesisUtterance(text);
-  u.rate = 0.9;
-  u.pitch = 0.85;
-  u.lang = 'en-GB';
+  u.rate = 0.9; u.pitch = 0.85; u.lang = 'en-GB';
   var voices = synth.getVoices();
   for (var i = 0; i < voices.length; i++) {
     if (/Google UK English Male/i.test(voices[i].name)) { u.voice = voices[i]; break; }
@@ -279,104 +583,6 @@ function addMsg(text, who) {
   chat.scrollTop = chat.scrollHeight;
 }
 
-// === JOKES & FACTS ===
-var JOKES = [
-  "Why did the developer go broke, sir? He used up all his cache.",
-  "Why do programmers prefer dark mode, sir? Because light attracts bugs.",
-  "What is a computer's favourite snack, sir? Microchips.",
-  "Why did the smartphone need glasses, sir? It lost all its contacts.",
-  "How many programmers does it take to change a light bulb, sir? None. That is a hardware problem."
-];
-var FACTS = [
-  "Honey never spoils, sir. Three thousand year old honey was found in Egyptian tombs.",
-  "Octopuses have three hearts and blue blood, sir.",
-  "A day on Venus is longer than its year, sir.",
-  "Bananas are berries, sir, but strawberries are not.",
-  "Sharks existed before trees did, sir."
-];
-
-function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-
-// === THE BRAIN ===
-function reply(input) {
-  var t = input.toLowerCase().trim();
-
-  // Greetings
-  if (/\b(hello|hi|hey|greetings)\b/.test(t)) {
-    var h = new Date().getHours();
-    var g = h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
-    return g + ", sir." + (userName ? " Always a pleasure, " + userName + "." : " How may I help?");
-  }
-
-  // Name
-  if (/\b(what'?s your name|who are you)\b/.test(t))
-    return "I am JARVIS, sir. Just A Rather Very Intelligent System.";
-  if (/\b(my name is|call me) (\w+)/.test(t)) {
-    var m = t.match(/\b(?:my name is|call me) (\w+)/);
-    userName = m[1].charAt(0).toUpperCase() + m[1].slice(1);
-    return "A pleasure to meet you, " + userName + ". I shall remember that.";
-  }
-  if (/\b(what'?s my name|who am i)\b/.test(t))
-    return userName ? "You are " + userName + ", sir." : "You have not told me your name yet, sir.";
-
-  // Thanks / bye
-  if (/\b(thank|thanks|cheers)\b/.test(t)) return "You are most welcome, sir.";
-  if (/\b(bye|goodbye|see you)\b/.test(t)) return "Goodbye, sir. I shall be here when you need me.";
-
-  // Time
-  if (/\btime\b/.test(t) && !/\btimes\b/.test(t)) {
-    var now = new Date();
-    return "The time is " + now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) + ", sir.";
-  }
-  // Date
-  if (/\b(date|day)\b/.test(t) && /\b(what|today|which)\b/.test(t)) {
-    var d = new Date();
-    return "Today is " + d.toLocaleDateString(undefined, {weekday:'long', month:'long', day:'numeric'}) + ", sir.";
-  }
-
-  // Math
-  var mathExpr = t
-    .replace(/what(?:'s| is)?/g, '')
-    .replace(/plus/g, '+').replace(/minus/g, '-')
-    .replace(/times|multiplied by/g, '*')
-    .replace(/divided by/g, '/')
-    .replace(/[^0-9+\-*/().\s]/g, '')
-    .trim();
-  if (/[+\-*/]/.test(mathExpr) && /\d/.test(mathExpr)) {
-    try {
-      var result = Function('"use strict"; return (' + mathExpr + ')')();
-      if (typeof result === 'number' && isFinite(result)) {
-        return "That would be " + result + ", sir.";
-      }
-    } catch(e) {}
-  }
-
-  // Random
-  if (/\b(flip a coin|toss a coin)\b/.test(t))
-    return "It is " + (Math.random() < 0.5 ? 'heads' : 'tails') + ", sir.";
-  if (/\b(roll a (dice|die))\b/.test(t))
-    return "You have rolled a " + (Math.floor(Math.random()*6)+1) + ", sir.";
-  if (/\b(random number|pick a number)\b/.test(t))
-    return "I have chosen " + (Math.floor(Math.random()*100)+1) + ", sir.";
-
-  // Fun
-  if (/\b(joke|funny|laugh)\b/.test(t)) return pick(JOKES);
-  if (/\b(fun fact|tell me a fact|did you know)\b/.test(t)) return pick(FACTS);
-
-  // Help
-  if (/\b(help|what can you do)\b/.test(t))
-    return "I can tell the time, the date, do math, tell jokes and facts, flip coins, roll dice, and remember your name, sir.";
-
-  // Fallback
-  return pick([
-    "I am not certain I understood, sir. Perhaps rephrase?",
-    "I am afraid that one eludes me, sir.",
-    "Curious, sir. I am still learning that.",
-    "Could you say that another way, sir?"
-  ]);
-}
-
-// === HANDLE INPUT ===
 function handle(text) {
   addMsg(text, 'user');
   var r = reply(text);
@@ -404,31 +610,26 @@ function setState(on) {
 
 // === SPEECH RECOGNITION ===
 var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-
 if (!SR) {
-  addMsg('Sorry sir, this browser does not support voice. Try Chrome.', 'jarvis');
+  addMsg('Sorry sir, this browser does not support voice.', 'jarvis');
   micBtn.disabled = true;
 } else {
   recognition = new SR();
   recognition.lang = 'en-GB';
   recognition.continuous = false;
   recognition.interimResults = false;
-
   recognition.onstart = function() { setState(true); };
-
   recognition.onresult = function(e) {
     var text = e.results[0][0].transcript;
     setState(false);
     handle(text);
   };
-
   recognition.onerror = function(e) {
     setState(false);
     if (e.error === 'no-speech') addMsg('I did not hear you, sir.', 'jarvis');
     else if (e.error === 'not-allowed') addMsg('Microphone is blocked, sir.', 'jarvis');
     else if (e.error !== 'aborted') addMsg('Error, sir: ' + e.error, 'jarvis');
   };
-
   recognition.onend = function() { setState(false); };
 }
 
@@ -447,7 +648,6 @@ clearBtn.onclick = function() {
   addMsg('Systems reset, sir. How may I assist?', 'jarvis');
 };
 
-// === QUICK CHIPS ===
 var chips = document.querySelectorAll('.chip');
 for (var i = 0; i < chips.length; i++) {
   chips[i].onclick = function() {
@@ -455,13 +655,11 @@ for (var i = 0; i < chips.length; i++) {
   };
 }
 
-// === PRELOAD VOICES ===
 if (synth) {
   synth.getVoices();
   if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = function() { synth.getVoices(); };
 }
 
-// === SERVICE WORKER ===
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js');
 }
