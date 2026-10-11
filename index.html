@@ -6,7 +6,7 @@
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#03070f">
 <link rel="icon" href="icon-192.png">
-<title>JARVIS 2.0</title>
+<title>SISU</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   html, body { height: 100%; overflow: hidden; }
@@ -168,8 +168,8 @@
 
     <div class="header">
       <div>
-        <div class="title">JARVIS</div>
-        <div class="subtitle">Mark 2.0 · Artificial Intelligence</div>
+        <div class="title">SISU</div>
+<div class="subtitle">Artificial Intelligence · Online</div>
       </div>
       <div class="status">
         <span class="dot" id="dot"></span>
@@ -200,7 +200,7 @@
     </div>
 
     <div class="chat" id="chat">
-      <div class="msg jarvis">Good evening, sir. JARVIS Mark two point zero. Systems upgraded. How may I assist?</div>
+<div class="msg jarvis">Good evening, sir. SISU at your service. How may I assist?</div>
     </div>
 
     <div class="quick-chips">
@@ -455,7 +455,7 @@ function reply(input) {
 
   // Identity
   if (/\b(what'?s your name|who are you|introduce yourself)\b/.test(t))
-    return "I am JARVIS, sir. Just A Rather Very Intelligent System. Version two point zero.";
+    return "I am SISU, sir. Your personal assistant. How may I help?";
   if (/\b(how are you|how'?s it going|what'?s up|wassup)\b/.test(t))
     return pick(["All systems nominal, sir.", "Operating at peak efficiency, sir.", "Quite well, sir. And yourself?", "Running smoothly, sir."]);
   if (/\b(thank you|thanks|thx|ty|cheers)\b/.test(t))
