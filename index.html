@@ -190,7 +190,7 @@
       <button class="clear" id="clearBtn">↺</button>
     </div>
 
-    <div class="hint">tap mic · speak · clap to wake</div>
+    <div class="hint">tap mic · speak · sir</div>
   </div>
 </div>
 
@@ -209,6 +209,7 @@ var synth = window.speechSynthesis;
 var userName = null;
 
 // === AI BRAIN (GROQ) ===
+// Paste your Groq API key below!
 var API_KEY = "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"; 
 
 function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
@@ -381,56 +382,8 @@ function startListening() {
   try { recognition.start(); } catch(e) { setState(false); }
 }
 
-// === CLAP DETECTOR ===
-var audioContext = null;
-var analyser = null;
-var clapThreshold = 120; 
-var isClapEnabled = false;
-
-async function startClapDetector() {
-  if (isClapEnabled) return;
-  try {
-    var stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    analyser = audioContext.createAnalyser();
-    var source = audioContext.createMediaStreamSource(stream);
-    source.connect(analyser);
-    analyser.fftSize = 512;
-    var dataArray = new Uint8Array(analyser.frequencyBinCount);
-    
-    isClapEnabled = true;
-
-    function detectClap() {
-      if (!isClapEnabled) return;
-      analyser.getByteFrequencyData(dataArray);
-      
-      var sum = 0;
-      for (var i = 0; i < dataArray.length; i++) {
-        sum += dataArray[i];
-      }
-      var average = sum / dataArray.length;
-
-      if (average > clapThreshold && !listening) {
-        addMsg('*Clap detected*', 'user');
-        addMsg('At your service, sir.', 'jarvis');
-        speak("At your service, sir.");
-        
-        isClapEnabled = false;
-        setTimeout(function() { 
-          startListening(); 
-          setTimeout(function() { isClapEnabled = true; }, 3000); 
-        }, 1500); 
-      }
-      requestAnimationFrame(detectClap);
-    }
-    detectClap();
-  } catch (e) {
-    console.warn("Mic access needed for clap detector.", e);
-  }
-}
-
+// === MIC BUTTON ===
 micBtn.onclick = function() {
-  startClapDetector();
   startListening();
 };
 
@@ -459,4 +412,4 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 </body>
-     </html>
+</html>
