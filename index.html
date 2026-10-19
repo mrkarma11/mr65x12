@@ -85,6 +85,12 @@
   .msg.jarvis { align-self: flex-start; color: #00ff41; background: rgba(0,255,65,0.04); border-left: 2px solid #00ff41; text-shadow: 0 0 4px rgba(0,255,65,0.4); }
   .msg.jarvis::before { content: '$ '; color: #00ff41; opacity: 0.6; }
 
+  .input-area { display: flex; gap: 6px; margin-top: 8px; }
+  .input-area input { flex: 1; background: #000; border: 1px solid #1a4a1a; color: #00ff41; padding: 8px 12px; font-family: 'Courier New', monospace; font-size: 0.8rem; outline: none; }
+  .input-area input:focus { border-color: #00ff41; }
+  .input-area button { background: #000; border: 1px solid #00ff41; color: #00ff41; padding: 0 16px; font-family: 'Courier New', monospace; font-weight: bold; cursor: pointer; }
+  .input-area button:active { background: rgba(0,255,65,0.15); }
+
   .quick-chips { display: flex; gap: 6px; overflow-x: auto; padding: 8px 0 4px; }
   .quick-chips::-webkit-scrollbar { display: none; }
   .chip { flex-shrink: 0; background: #000; border: 1px solid #1a4a1a; color: #00ff41; padding: 5px 10px; font-size: 0.65rem; font-family: 'Courier New', monospace; white-space: nowrap; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
@@ -168,6 +174,12 @@
       <div class="msg jarvis">Good evening, sir. SISU v3.0 online. How may I assist?</div>
     </div>
 
+    <!-- KEYBOARD INPUT -->
+    <div class="input-area">
+      <input type="text" id="textInput" placeholder="type a command, sir...">
+      <button id="sendBtn">SEND</button>
+    </div>
+
     <div class="quick-chips">
       <div class="chip" data-cmd="what time is it">time</div>
       <div class="chip" data-cmd="tell me a joke">joke</div>
@@ -190,7 +202,7 @@
       <button class="clear" id="clearBtn">↺</button>
     </div>
 
-    <div class="hint">tap mic · speak · sir</div>
+    <div class="hint">tap mic · speak · type</div>
   </div>
 </div>
 
@@ -202,6 +214,8 @@ var dot = document.getElementById('dot');
 var statusText = document.getElementById('statusText');
 var orb = document.getElementById('orb');
 var soundBars = document.getElementById('soundBars');
+var textInput = document.getElementById('textInput');
+var sendBtn = document.getElementById('sendBtn');
 
 var listening = false;
 var recognition = null;
@@ -311,7 +325,21 @@ function handle(text) {
   } else if (/\b(roll a (dice|die))\b/.test(t)) {
     r = "You have rolled a " + (Math.floor(Math.random()*6)+1) + ", sir.";
   } else if (/\b(joke|funny|laugh)\b/.test(t)) {
-    r = "Why did the developer go broke, sir? He used up all his cache.";
+    r = pick([
+      "Why did the developer go broke, sir? He used up all his cache.",
+      "Why do programmers prefer dark mode, sir? Because light attracts bugs.",
+      "What is a computer's favourite snack, sir? Microchips.",
+      "Why did the smartphone need glasses, sir? It lost all its contacts."
+    ]);
+  } else if (/\b(fact|fun fact|did you know)\b/.test(t)) {
+    r = pick([
+      "Honey never spoils, sir. Three thousand year old honey was found in Egyptian tombs.",
+      "Octopuses have three hearts and blue blood, sir.",
+      "A day on Venus is longer than its year, sir.",
+      "Bananas are berries, sir, but strawberries are not.",
+      "Sharks existed before trees did, sir.",
+      "Your brain uses about twenty percent of your body's total energy, sir."
+    ]);
   } else if (/\b(thank you|thanks|thx|cheers)\b/.test(t)) {
     r = "You are most welcome, sir.";
   } else if (/\b(bye|goodbye|see you)\b/.test(t)) {
@@ -386,6 +414,23 @@ function startListening() {
 micBtn.onclick = function() {
   startListening();
 };
+
+// === KEYBOARD INPUT ===
+function sendText() {
+  var val = textInput.value.trim();
+  if (!val) return;
+  textInput.value = '';
+  handle(val); // Send to brain
+}
+
+sendBtn.onclick = sendText;
+
+textInput.addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    sendText();
+    textInput.blur(); // Hides keyboard
+  }
+});
 
 clearBtn.onclick = function() {
   if (synth) { try { synth.cancel(); } catch(e){} }
